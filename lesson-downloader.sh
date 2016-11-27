@@ -33,20 +33,25 @@ done
 
 # extract links to mp3 and pdf files
 while read -r URL; do
-  wget -O $TMP_FILE3 $URL
+  wget -O $TMP_FILE3 "$URL"
   # mp3
   cat $TMP_FILE3 | grep "http://hwcdn.libsyn.com/.*\" onclick" | sed "s/href=\"//" \
+    | grep -o "http.*onclick" | sed "s/\"\ onclick//" | sort | uniq >> $TMP_FILE4
+  cat $TMP_FILE3 | grep "http://traffic.libsyn.com/.*\" onclick" | sed "s/href=\"//" \
     | grep -o "http.*onclick" | sed "s/\"\ onclick//" | sort | uniq >> $TMP_FILE4
 
   # pdf
   cat $TMP_FILE3 | grep "http://ec.libsyn.com/.*\" onclick" | sed "s/href=\"//" \
    | grep -o "http.*onclick" | sed "s/\"\ onclick//" | sort | uniq >> $TMP_FILE4
+  cat $TMP_FILE3 | grep "http://traffic.libsyn.com/.*\" onclick" | sed "s/href=\"//" \
+   | grep -o "http.*onclick" | sed "s/\"\ onclick//" | sort | uniq >> $TMP_FILE4
 done < "$TMP_FILE2"
+
 
 # download mp3 and pdf
 while read -r URL; do
-  TMP_NAME=`echo $URL | sed "s/\?.*//" | grep -o "ttmik.*"`
-  wget -O "$LEVEL""/""$TMP_NAME" $URL
+  TMP_NAME=`echo "$URL" | sed "s/\?.*//" | grep -o "ttmik.*"`
+  wget -O "$LEVEL""/""$TMP_NAME" "$URL"
 done < "$TMP_FILE4"
 
 rm -rf $TMP_FILE $TMP_FILE2 $TMP_FILE3 $TMP_FILE4
