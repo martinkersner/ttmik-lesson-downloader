@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # Martin Kersner, m.kersner@gmail.com
 # 2016/11/27
 
